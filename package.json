@@ -15,7 +15,6 @@
     "lint:app": "pnpm run lint --filter @eratos/app"
   },
   "devDependencies": {
-    "husky": "^7.0.2",
-    "typescript": "^4.4.2"
+    "husky": "^7.0.2"
   }
 }
