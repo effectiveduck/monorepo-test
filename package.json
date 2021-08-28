@@ -1,0 +1,21 @@
+{
+  "name": "monorepo-test",
+  "description": "An initial monorepo architecture test for Eratos",
+  "version": "0.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=16",
+    "pnpm": ">=6"
+  },
+  "scripts": {
+    "build:utilities": "pnpm run build --filter @eratos/utilities",
+    "build:utilities:watch": "pnpm run build:watch --filter @eratos/utilities",
+    "dev:app": "pnpm run dev --filter @eratos/app",
+    "build:app": "pnpm run build --filter @eratos/app",
+    "lint:app": "pnpm run lint --filter @eratos/app"
+  },
+  "devDependencies": {
+    "husky": "^7.0.2",
+    "typescript": "^4.4.2"
+  }
+}
