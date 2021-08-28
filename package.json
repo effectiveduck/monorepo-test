@@ -8,6 +8,7 @@
     "pnpm": ">=6"
   },
   "scripts": {
+    "prepare": "pnpm dlx husky install",
     "build:utilities": "pnpm run build --filter @eratos/utilities",
     "build:utilities:watch": "pnpm run build:watch --filter @eratos/utilities",
     "dev:app": "pnpm run dev --filter @eratos/app",
