@@ -1,6 +1,8 @@
 {
-  "eslint.workingDirectories": [
-    "./packages/app",
-    "./packages/utilities"
-  ]
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.workingDirectories": ["./packages/app", "./packages/utilities"]
 }
