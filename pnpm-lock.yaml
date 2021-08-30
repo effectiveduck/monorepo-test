@@ -13,6 +13,7 @@ importers:
       '@eratos/utilities': workspace:*
       '@types/react': 17.0.19
       '@typescript-eslint/eslint-plugin': ^4.29.3
+      '@typescript-eslint/parser': ^4.29.3
       eslint: 7.32.0
       eslint-config-next: 11.1.0
       eslint-config-prettier: ^8.3.0
@@ -29,7 +30,8 @@ importers:
       react-dom: 17.0.2_react@17.0.2
     devDependencies:
       '@types/react': 17.0.19
-      '@typescript-eslint/eslint-plugin': 4.29.3_eslint@7.32.0+typescript@4.4.2
+      '@typescript-eslint/eslint-plugin': 4.29.3_5b13bab190e8051f191796d8c4619073
+      '@typescript-eslint/parser': 4.29.3_eslint@7.32.0+typescript@4.4.2
       eslint: 7.32.0
       eslint-config-next: 11.1.0_938b2072f5d2b522e167c3cc47068ce4
       eslint-config-prettier: 8.3.0_eslint@7.32.0
@@ -40,13 +42,15 @@ importers:
   packages/utilities:
     specifiers:
       '@typescript-eslint/eslint-plugin': ^4.29.3
+      '@typescript-eslint/parser': ^4.29.3
       eslint: 7.32.0
       eslint-config-prettier: ^8.3.0
       lint-staged: ^11.1.2
       prettier: ^2.3.2
       typescript: ^4.4.2
     devDependencies:
-      '@typescript-eslint/eslint-plugin': 4.29.3_eslint@7.32.0+typescript@4.4.2
+      '@typescript-eslint/eslint-plugin': 4.29.3_5b13bab190e8051f191796d8c4619073
+      '@typescript-eslint/parser': 4.29.3_eslint@7.32.0+typescript@4.4.2
       eslint: 7.32.0
       eslint-config-prettier: 8.3.0_eslint@7.32.0
       lint-staged: 11.1.2
@@ -278,7 +282,7 @@ packages:
     resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
     dev: true
 
-  /@typescript-eslint/eslint-plugin/4.29.3_eslint@7.32.0+typescript@4.4.2:
+  /@typescript-eslint/eslint-plugin/4.29.3_5b13bab190e8051f191796d8c4619073:
     resolution: {integrity: sha512-tBgfA3K/3TsZY46ROGvoRxQr1wBkclbVqRQep97MjVHJzcRBURRY3sNFqLk0/Xr//BY5hM9H2p/kp+6qim85SA==}
     engines: {node: ^10.12.0 || >=12.0.0}
     peerDependencies:
@@ -290,6 +294,7 @@ packages:
         optional: true
     dependencies:
       '@typescript-eslint/experimental-utils': 4.29.3_eslint@7.32.0+typescript@4.4.2
+      '@typescript-eslint/parser': 4.29.3_eslint@7.32.0+typescript@4.4.2
       '@typescript-eslint/scope-manager': 4.29.3
       debug: 4.3.2
       eslint: 7.32.0
