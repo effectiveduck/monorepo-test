@@ -1,4 +1,6 @@
+const withTM = require("next-transpile-modules")(["@eratos/utilities"])
+
 /** @type {import('next').NextConfig} */
-module.exports = {
+module.exports = withTM({
   reactStrictMode: true,
-}
+})

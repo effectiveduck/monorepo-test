@@ -19,6 +19,7 @@ importers:
       eslint-config-prettier: ^8.3.0
       lint-staged: ^11.1.2
       next: 11.1.0
+      next-transpile-modules: ^8.0.0
       prettier: ^2.3.2
       react: 17.0.2
       react-dom: 17.0.2
@@ -36,6 +37,7 @@ importers:
       eslint-config-next: 11.1.0_938b2072f5d2b522e167c3cc47068ce4
       eslint-config-prettier: 8.3.0_eslint@7.32.0
       lint-staged: 11.1.2
+      next-transpile-modules: 8.0.0
       prettier: 2.3.2
       typescript: 4.4.2
 
@@ -1068,6 +1070,14 @@ packages:
       iconv-lite: 0.6.3
     dev: false
 
+  /enhanced-resolve/5.8.2:
+    resolution: {integrity: sha512-F27oB3WuHDzvR2DOGNTaYy0D5o0cnrv8TeI482VM4kYgQd/FT9lUQwuNsJ0oOHtBUq7eiW5ytqzp7nBFknL+GA==}
+    engines: {node: '>=10.13.0'}
+    dependencies:
+      graceful-fs: 4.2.8
+      tapable: 2.2.0
+    dev: true
+
   /enquirer/2.3.6:
     resolution: {integrity: sha512-yjNnPr315/FjS4zIsUxYguYUPP2e1NK4d7E7ZOLiyYCcbFBiTMyID+2wvm2w6+pZ/odMA7cRkjhsPbltwBOrLg==}
     engines: {node: '>=8.6'}
@@ -1118,7 +1128,6 @@ packages:
   /escalade/3.1.1:
     resolution: {integrity: sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw==}
     engines: {node: '>=6'}
-    dev: false
 
   /escape-string-regexp/1.0.5:
     resolution: {integrity: sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=}
@@ -2195,6 +2204,13 @@ packages:
     resolution: {integrity: sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=}
     dev: true
 
+  /next-transpile-modules/8.0.0:
+    resolution: {integrity: sha512-Q2f2yB0zMJ8KJbIYAeZoIxG6cSfVk813zr6B5HzsLMBVcJ3FaF8lKr7WG66n0KlHCwjLSmf/6EkgI6QQVWHrDw==}
+    dependencies:
+      enhanced-resolve: 5.8.2
+      escalade: 3.1.1
+    dev: true
+
   /next/11.1.0_01b6e46c81e6fda6a6d233df547d9171:
     resolution: {integrity: sha512-GHBk/c7Wyr6YbFRFZF37I0X7HKzkHHI8pur/loyXo5AIE8wdkbGPGO0ds3vNAO6f8AxZAKGCRYtAzoGlVLoifA==}
     engines: {node: '>=12.0.0'}
@@ -3231,6 +3247,11 @@ packages:
       slice-ansi: 4.0.0
       string-width: 4.2.2
       strip-ansi: 6.0.0
+    dev: true
+
+  /tapable/2.2.0:
+    resolution: {integrity: sha512-FBk4IesMV1rBxX2tfiK8RAmogtWn53puLOQlvO8XuwlgxcYbP4mVPS9Ph4aeamSyyVjOl24aYWAuc8U5kCVwMw==}
+    engines: {node: '>=6'}
     dev: true
 
   /text-table/0.2.0:
