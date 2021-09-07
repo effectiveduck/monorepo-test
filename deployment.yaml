@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: monorepo-test
+spec:
+    selector:
+        matchLabels:
+            app: monorepo-test
+    replicas: 1
+    template:
+        metadata:
+            labels:
+                app: monorepo-test
+        spec:
+            containers:
+                - name: monorepo-test
+                  imagePullPolicy: Never
+                  image: monorepo-test_my_app:latest
+                  ports:
+                      - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: monorepo-test
+spec:
+    type: NodePort
+    selector:
+        app: monorepo-test
+    ports:
+        - port: 8080
+          targetPort: 3000
