@@ -1,0 +1,26 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+  
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: eratos.azurecr.io
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+        
+    - name: Build the Docker image and push to ACR
+      run: |
+        docker build . --file Dockerfile --tag eratos.azurecr.io/monorepo-test-ci:${{ github.sha }}
+        docker push eratos.azurecr.io/monorepo-test-ci:${{ github.sha }}
