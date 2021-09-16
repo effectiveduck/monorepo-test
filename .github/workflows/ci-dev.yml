@@ -35,12 +35,14 @@ jobs:
     needs: linter
     steps:
     - uses: actions/checkout@v2
-    - uses: azure/docker-login@v1
+    
+    - name: Azure Container Registry Login
+      uses: Azure/docker-login@v1
       with:
-        login-server: eratos.azurecr.io
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
-
+        login-server: https://eratos.azurecr.io
+        
     - name: Build the Docker image and push to ACR
       run: |
         docker build -t eratos.azurecr.io/eratos/monorepo-test-ci:${{ github.sha }} .
