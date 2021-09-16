@@ -33,3 +33,6 @@ cypress/screenshots
 packages/*/lib
 packages/*/dist
 packages/*/coverage
+
+# helm package
+*.tgz

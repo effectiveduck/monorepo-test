@@ -18,6 +18,11 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: 3000
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets }}
+      {{- end }}
+
 ---
 apiVersion: v1
 kind: Service
@@ -28,5 +33,6 @@ spec:
     selector:
         app: {{ .Values.selectorLabel }}
     ports:
-        - port: {{ .Values.service.port }}
+        - protocol: TCP
+          port: {{ .Values.service.port }}
           targetPort: 3000

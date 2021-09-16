@@ -8,12 +8,12 @@ name: monorepo-test
 selectorLabel: monorepo-test
 
 image:
-  repository: monorepo-test_my_app
-  pullPolicy: Never
+  repository: eratos.azurecr.io/monorepo-test_my_app
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: latest
+imagePullSecrets: acr-secret
 
-imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
@@ -40,7 +40,7 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: NodePort
+  type: LoadBalancer
   port: 8080
 
 ingress:
