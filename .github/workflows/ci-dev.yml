@@ -22,7 +22,7 @@ jobs:
         node-version: '16'
     - uses: pnpm/action-setup@v2.0.1
       with:
-        version: 6.14.6
+        version: 6.15.0
 
     - name: Install Dependencies
       run: pnpm install
@@ -40,9 +40,8 @@ jobs:
         login-server: eratos.azurecr.io
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
-        
+
     - name: Build the Docker image and push to ACR
       run: |
-        docker build -t eratos.azurecr.io/monorepo-test-ci:${{ github.sha }} .
-        docker push eratos.azurecr.io/monorepo-test-ci:${{ github.sha }}
-
+        docker build -t eratos.azurecr.io/eratos/monorepo-test-ci:${{ github.sha }} .
+        docker push eratos.azurecr.io/eratos/monorepo-test-ci:${{ github.sha }}
