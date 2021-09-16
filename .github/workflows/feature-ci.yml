@@ -22,5 +22,5 @@ jobs:
         
     - name: Build the Docker image and push to ACR
       run: |
-        docker build . -t --tag eratos.azurecr.io/monorepo-test-ci:${{ github.sha }}
+        docker build -t eratos.azurecr.io/monorepo-test-ci:${{ github.sha }} .
         docker push eratos.azurecr.io/monorepo-test-ci:${{ github.sha }}
