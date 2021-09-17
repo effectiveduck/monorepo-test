@@ -44,9 +44,9 @@ jobs:
     - name: Azure Container Registry Login
       uses: Azure/docker-login@v1
       with:
+        login-server: eratos.azurecr.io
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
-        login-server: eratos.azurecr.io
 
     - name: Build the Docker image and push to ACR
       run: |
