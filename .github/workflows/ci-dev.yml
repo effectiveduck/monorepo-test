@@ -36,6 +36,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
     - name: Azure Container Registry Login
       uses: Azure/docker-login@v1
       with:
@@ -45,5 +50,5 @@ jobs:
         
     - name: Build the Docker image and push to ACR
       run: |
-        docker build -t eratos.azurecr.io/eratos/monorepo-test-ci:${{ github.sha }} .
-        docker push eratos.azurecr.io/eratos/monorepo-test-ci:${{ github.sha }}
+        docker build -t eratos.azurecr.io/eratos/monorepo-test-ci:latest .
+        docker push eratos.azurecr.io/eratos/monorepo-test-ci:latest
