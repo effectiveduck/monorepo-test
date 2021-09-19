@@ -8,7 +8,7 @@ name: monorepo-test
 selectorLabel: monorepo-test
 
 image:
-  repository: eratos.azurecr.io/monorepo-test_my_app
+  repository: eratos.azurecr.io/monorepo-test-ci
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: latest

@@ -21,7 +21,7 @@ const Home: NextPage = () => {
         </h1>
 
         <p>
-          Get started by editing <code>pages/index.js</code>
+          Get started by editinggggggggggggg <code>pages/index.js</code>
         </p>
 
         <div>
