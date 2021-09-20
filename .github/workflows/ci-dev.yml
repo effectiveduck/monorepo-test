@@ -77,6 +77,18 @@ jobs:
     
     - name: Print kube context response
       run: echo "Response was ${{ steps.context.outputs.response }}"
+    
+    - name: Check kubectk context
+      id: helm-context
+      uses: koslib/helm-eks-action@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+      with:
+#         command: helm upgrade release1 --install --wait monorepo-chart -f monorepo-chart/values.yaml
+        command: helm ls
+    
+    - name: Print kube context response
+      run: echo "Response was ${{ steps.helm-context.outputs.response }}"
       
 
 #     - name: Get URL
