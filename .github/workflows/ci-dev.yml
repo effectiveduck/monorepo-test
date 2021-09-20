@@ -66,28 +66,28 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-southeast-2
 
-    - name: Check kubectk context
-      id: context
-      uses: koslib/helm-eks-action@master
+    - name: Check kubectl context
+      id: kube-context
+      uses: wahyd4/kubectl-helm-action@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
 #         command: helm upgrade release1 --install --wait monorepo-chart -f monorepo-chart/values.yaml
-        command: kubectl config current-context
+        arg: kubectl config current-context
     
-    - name: Print kube context response
-      run: echo "Response was ${{ steps.context.outputs.response }}"
+    - name: Print kube current-context response
+      run: echo "Response was ${{ steps.kube-context.outputs.response }}"
     
-    - name: Check kubectk context
+    - name: Check helm context
       id: helm-context
-      uses: koslib/helm-eks-action@master
+      uses: wahyd4/kubectl-helm-action@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
 #         command: helm upgrade release1 --install --wait monorepo-chart -f monorepo-chart/values.yaml
-        command: helm ls
+        arg: helm ls
     
-    - name: Print kube context response
+    - name: Print helm response
       run: echo "Response was ${{ steps.helm-context.outputs.response }}"
       
 
