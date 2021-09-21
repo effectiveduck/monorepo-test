@@ -6,9 +6,6 @@ name: Build pnpm and push to ACR
 on:
   push:
     branches: [ develop ]
-  pull_request:
-    branches: [ develop ]
-  workflow_dispatch:
 
 jobs:
   linter:
