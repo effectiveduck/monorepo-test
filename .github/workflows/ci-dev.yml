@@ -82,7 +82,7 @@ jobs:
 #         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
         cluster-name: eratos-eks-aT2MeVfg
-        command: "kubectl config current-context"
+        command: kubectl config current-context
 
     - name: Print Response
       run: echo "Response was ${{ steps.context.outputs.response }}"
