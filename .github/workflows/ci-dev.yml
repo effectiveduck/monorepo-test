@@ -11,78 +11,63 @@ on:
   workflow_dispatch:
 
 jobs:
-#   linter:
-#     runs-on: ubuntu-latest
-#     steps:
-#     - uses: actions/checkout@v2
-#       with:
-#           fetch-depth: 100
-#     - uses: actions/setup-node@v2
-#       with:
-#         node-version: '16'
-#     - uses: pnpm/action-setup@v2.0.1
-#       with:
-#         version: 6.15.0
+  linter:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          fetch-depth: 100
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+    - uses: pnpm/action-setup@v2.0.1
+      with:
+        version: 6.15.0
 
-#     - name: Install Dependencies
-#       run: pnpm install
+    - name: Install Dependencies
+      run: pnpm install
 
-#     - name: Run Linter
-#       run: pnpm run lint --filter @eratos/app
+    - name: Run Linter
+      run: pnpm run lint --filter @eratos/app
 
-#   build-and-push:
-#     runs-on: ubuntu-latest
-#     needs: linter
-#     steps:
-#     - uses: actions/checkout@v2
+  build-and-push:
+    runs-on: ubuntu-latest
+    needs: linter
+    steps:
+    - uses: actions/checkout@v2
 
-#     - name: Azure Login
-#       uses: azure/login@v1
-#       with:
-#         creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-#     - name: Azure Container Registry Login
-#       uses: Azure/docker-login@v1
-#       with:
-#         login-server: eratos.azurecr.io
-#         username: ${{ secrets.ACR_USERNAME }}
-#         password: ${{ secrets.ACR_PASSWORD }}
+    - name: Azure Container Registry Login
+      uses: Azure/docker-login@v1
+      with:
+        login-server: eratos.azurecr.io
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
 
-#     - name: Build the Docker image and push to ACR
-#       run: |
-#         docker build -t eratos.azurecr.io/monorepo-test-ci:latest .
-#         docker push eratos.azurecr.io/monorepo-test-ci:latest
+    - name: Build the Docker image and push to ACR
+      run: |
+        docker build -t eratos.azurecr.io/monorepo-test-ci:latest .
+        docker push eratos.azurecr.io/monorepo-test-ci:latest
 
   deploy:
     runs-on: ubuntu-latest
-#     needs: build-and-push
+    needs: build-and-push
     steps:
     - uses: actions/checkout@v2
 
     - name: AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-southeast-2
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-southeast-2
 
     - name: Helm list releases
       uses: netf/helm-eks-action@v1
-#       env:
-#         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
         cluster-name: eratos-eks-aT2MeVfg
-#         command: helm upgrade release1 --install --wait monorepo-chart -f monorepo-chart/values.yaml
-        command: helm ls
-
-    - name: Get kubectl current-context
-      id: context
-      uses: netf/helm-eks-action@v1
-#       env:
-#         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-      with:
-        cluster-name: eratos-eks-aT2MeVfg
-        command: kubectl config current-context
-
-    - name: Print Response
-      run: echo "Response was ${{ steps.context.outputs.response }}"
+        command: helm upgrade release1 --install --wait monorepo-chart -f monorepo-chart/values.yaml
