@@ -21,18 +21,23 @@ const Home: NextPage = () => {
         </h1>
 
         <p>
-          Get started by editing this thing <code>pages/index.js</code>
+          Get started by editing this thing over here{" "}
+          <code>pages/index.js</code>
         </p>
 
         <div>
           <a href="https://nextjs.org/docs">
             <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
+            <p>
+              Find in-depth information about Next.js features and APIIIIIIII.
+            </p>
           </a>
 
           <a href="https://nextjs.org/learn">
             <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
+            <p>
+              Learn about Next.js in an interactive course with quizzesssssss!
+            </p>
           </a>
 
           <a href="https://github.com/vercel/next.js/tree/master/examples">
