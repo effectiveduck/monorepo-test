@@ -83,6 +83,6 @@ jobs:
       with:
         cluster-name: eratos-eks-aT2MeVfg
         command: kubectl get svc my_svc -o json | jq -r '.status.loadBalancer.ingress[0].hostname'
-
+    
     - name: Print Response
       run: echo "Response was ${{ steps.url.outputs.response }}"
