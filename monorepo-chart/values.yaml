@@ -47,15 +47,13 @@ ingress:
   enabled: true
   className: ""
   annotations:
-    kubernetes.io/ingress.class: nginx
-    kubernetes.io/tls-acme: "true"
     alb.ingress.kubernetes.io/scheme: internet-facing
     kubernetes.io/ingress.class: alb
   hosts:
     - host: dev.eratos.ai
       paths:
         - path: /
-          pathType: ImplementationSpecific
+          pathType: Prefix
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
