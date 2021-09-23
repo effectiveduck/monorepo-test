@@ -45,7 +45,7 @@ service:
 
 ingress:
   enabled: true
-  className: nginx
+  className: ""
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     kubernetes.io/ingress.class: alb
