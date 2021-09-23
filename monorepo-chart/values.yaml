@@ -45,13 +45,12 @@ service:
 
 ingress:
   enabled: true
-  className: ""
+  className: nginx
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
-    external-dns.alpha.kubernetes.io/hostname: dev.eratos.ai
     kubernetes.io/ingress.class: alb
   hosts:
-    - host:
+    - host: dev.eratos.ai
       paths:
         - path: /
           pathType: Prefix
