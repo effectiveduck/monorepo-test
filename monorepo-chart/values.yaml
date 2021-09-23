@@ -48,10 +48,10 @@ ingress:
   className: ""
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/ip-address-type: dualstack
+    kubernetes.io/ingress.class: nginx
     kubernetes.io/ingress.class: alb
   hosts:
-    - host:
+    - host: dev.eratos.ai
       paths:
         - path: /
           pathType: Prefix
