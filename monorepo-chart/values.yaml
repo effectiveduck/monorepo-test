@@ -48,7 +48,6 @@ ingress:
   className: ""
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
-    kubernetes.io/ingress.class: nginx
     kubernetes.io/ingress.class: alb
   hosts:
     - host: dev.eratos.ai

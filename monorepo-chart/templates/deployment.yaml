@@ -28,8 +28,8 @@ apiVersion: v1
 kind: Service
 metadata:
     name: {{ .Values.selectorLabel }}
-    annotations:
-      external-dns.alpha.kubernetes.io/hostname: dev.eratos.ai
+    # annotations:
+    #   external-dns.alpha.kubernetes.io/hostname: dev.eratos.ai
 spec:
     type: {{ .Values.service.type }}
     selector:
