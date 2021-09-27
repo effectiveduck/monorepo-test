@@ -66,5 +66,5 @@ jobs:
     - name: Helm deploy to EKS
       uses: netf/helm-eks-action@v1
       with:
-        cluster-name: eratos-eks-aT2MeVfg
+        cluster-name: eratos-eks-e9tdnvjd
         command: helm upgrade release1 --install --wait monorepo-chart -f monorepo-chart/values.yaml
