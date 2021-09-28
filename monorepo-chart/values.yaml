@@ -53,7 +53,7 @@ ingress:
     kubernetes.io/ingress.class: alb
     cert-manager.io/cluster-issuer: letsencrypt-staging
   hosts:
-    - host: dev.eratos.ai
+    - host:
       paths:
         - path: /
           pathType: Prefix
