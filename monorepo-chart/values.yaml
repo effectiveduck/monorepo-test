@@ -52,7 +52,6 @@ ingress:
     kubernetes.io/ingress.class: nginx
     kubernetes.io/ingress.class: alb
     certmanager.k8s.io/cluster-issuer: letsencrypt-staging
-    kubernetes.io/tls-acme: "true"
   hosts:
     - host:
       paths:
