@@ -6,6 +6,7 @@ name: Build and deploy to dev env
 on:
   push:
     branches: [ develop ]
+  workflow_dispatch
 
 jobs:
   linter:
