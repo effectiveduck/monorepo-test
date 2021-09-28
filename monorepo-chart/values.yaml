@@ -49,9 +49,9 @@ ingress:
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     external-dns.alpha.kubernetes.io/hostname: dev.eratos.ai
-    kubernetes.io/ingress.class: "nginx"
+    kubernetes.io/ingress.class: nginx
     kubernetes.io/ingress.class: alb
-    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    cert-manager.io/cluster-issuer: letsencrypt-staging
   hosts:
     - host: dev.eratos.ai
       paths:
