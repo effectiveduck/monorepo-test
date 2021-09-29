@@ -45,7 +45,7 @@ service:
 
 ingress:
   enabled: true
-  className: "nginx.org/ingress-controller"
+  className: "k8s.io/ingress-nginx"
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     external-dns.alpha.kubernetes.io/hostname: dev.eratos.ai
