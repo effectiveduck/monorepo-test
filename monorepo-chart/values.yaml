@@ -54,7 +54,7 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt-staging
     # cert-manager.io/issuer: letsencrypt-staging
     kubernetes.io/tls-acme: "true"
-    # acme.cert-manager.io/http01-edit-in-place: "true"
+    acme.cert-manager.io/http01-edit-in-place: "true"
   hosts:
     - host:
       paths:
