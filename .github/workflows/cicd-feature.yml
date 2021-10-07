@@ -102,6 +102,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Get PR tag
+      run: echo "TAG=$(echo pr-$PR_NUMBER)" >> $GITHUB_ENV
+
     - name: AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -113,4 +116,4 @@ jobs:
       uses: netf/helm-eks-action@v1
       with:
         cluster-name: eratos-eks-kYFydEzM
-        command: helm uninstall ${{ needs.build-and-push.outputs.tag }}
+        command: helm uninstall $TAG
