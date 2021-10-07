@@ -21,7 +21,7 @@ const Home: NextPage = () => {
         </h1>
 
         <p>
-          Get started by editing this thing over here{" "}
+          Get started by editing this thing over hereeeeeeeeeeeeeeeee{" "}
           <code>pages/index.js</code>
         </p>
 
@@ -29,7 +29,8 @@ const Home: NextPage = () => {
           <a href="https://nextjs.org/docs">
             <h2>Documentation &rarr;</h2>
             <p>
-              Find in-depth information about Next.js features and APIIIIIIII.
+              Find in-depth information about Next.js features and
+              APIIIIIIIIIIIIIIIIIIIIIIIII.
             </p>
           </a>
 

@@ -5,71 +5,149 @@ name: Build and deploy to feature env
 
 on:
   pull_request:
-    branches:
-      - "develop"
-  # push:
-  #   branches:
-  #     - "feature/*"
+    branches: [ develop ]
+    types: [opened, reopened, synchronize, closed]
   workflow_dispatch:
 
+env:
+  PR_NUMBER: ${{ github.event.number }}
+
 jobs:
-  linter:
+  # sync:
+  #   if: github.event.action == 'synchronize'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Echo synchronize
+  #     run: echo synchronized!
+  # linter:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #     with:
+  #         fetch-depth: 100
+  #   - uses: actions/setup-node@v2
+  #     with:
+  #       node-version: '16'
+  #   - uses: pnpm/action-setup@v2.0.1
+  #     with:
+  #       version: 6.15.0
+  #
+  #   - name: Install Dependencies
+  #     run: pnpm install
+  #
+  #   - name: Run Linter
+  #     run: pnpm run lint --filter @eratos/app
+  #
+  #   - name: Echo PR Number
+  #     run: echo $PR_NUMBER
+  #
+  #   - name: Echo branch name
+  #     run: "echo branch name: $GITHUB_HEAD_REF"
+  #
+  #   - name: Set docker image tag env var
+  #     run: echo "IMAGE_TAG=$(echo pr-$PR_NUMBER-$GITHUB_HEAD_REF)" >> $GITHUB_ENV
+  #
+  #   - name: Echo docker image tag env var
+  #     run: echo $IMAGE_TAG
+
+  build-and-push:
+    if: github.event.pull_request.merged == false
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-      with:
-          fetch-depth: 100
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '16'
-    - uses: pnpm/action-setup@v2.0.1
-      with:
-        version: 6.15.0
 
-    - name: Install Dependencies
-      run: pnpm install
+    - name: Set docker image tag env var
+      run: echo "TAG=$(echo pr-$PR_NUMBER)" >> $GITHUB_ENV
 
-    - name: Run Linter
-      run: pnpm run lint --filter @eratos/app
-  
-  # build-and-push:
-  #   runs-on: ubuntu-latest
-  #   needs: linter
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #
-  #   - name: Azure Login
-  #     uses: azure/login@v1
-  #     with:
-  #       creds: ${{ secrets.AZURE_CREDENTIALS }}
-  #
-  #   - name: Azure Container Registry Login
-  #     uses: Azure/docker-login@v1
-  #     with:
-  #       login-server: eratos.azurecr.io
-  #       username: ${{ secrets.ACR_USERNAME }}
-  #       password: ${{ secrets.ACR_PASSWORD }}
-  #
-  #   - name: Build Docker image and push to ACR
-  #     run: |
-  #       docker build -t eratos.azurecr.io/monorepo-test-ci:latest .
-  #       docker push eratos.azurecr.io/monorepo-test-ci:latest
+    - name: Set tag output
+      id: set-tag-output
+      run: echo "::set-output name=tag::$TAG"
 
-  # deploy:
-  #   runs-on: ubuntu-latest
-  #   # needs: build-and-push
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #
-  #   - name: AWS Credentials
-  #     uses: aws-actions/configure-aws-credentials@v1
-  #     with:
-  #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #       aws-region: ap-southeast-2
-  #
-  #   - name: Helm deploy to EKS
-  #     uses: netf/helm-eks-action@v1
-  #     with:
-  #       cluster-name: eratos-eks-kYFydEzM
-  #       command: helm upgrade release1 --install --wait monorepo-chart -f monorepo-chart/values.yaml
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Azure Container Registry Login
+      uses: Azure/docker-login@v1
+      with:
+        login-server: eratos.azurecr.io
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+
+    - name: Build Docker image and push to ACR
+      run: |
+        docker build -t eratos.azurecr.io/monorepo-test-ci:$TAG .
+        docker push eratos.azurecr.io/monorepo-test-ci:$TAG
+
+    outputs:
+      tag: ${{ steps.set-tag-output.outputs.tag }}
+
+  new-deploy:
+    if: github.event.pull_request.merged == false && (github.event.action == 'opened' || github.event.action == 'reopened')
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-southeast-2
+
+    - name: Update Helm chart values.yaml
+      uses: mikefarah/yq@master
+      with:
+        cmd: IMAGE_TAG=${{ needs.build-and-push.outputs.tag }} HOST="${{ needs.build-and-push.outputs.tag }}.dev.eratos.com" SELECTOR_LABEL="monorepo-test-${{ needs.build-and-push.outputs.tag }}" yq e -i '.image.tag = env(IMAGE_TAG) | .ingress.hosts[0].host = env(HOST) | .selectorLabel = env(SELECTOR_LABEL) | .name = env(SELECTOR_LABEL)' monorepo-chart/values.yaml
+
+    - name: Helm deploy to EKS
+      uses: netf/helm-eks-action@v1
+      with:
+        cluster-name: eratos-eks-kYFydEzM
+        command: helm install ${{ needs.build-and-push.outputs.tag }} --wait monorepo-chart -f monorepo-chart/values.yaml
+
+  update-deploy:
+    if: github.event.pull_request.merged == false && github.event.action == 'synchronize'
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-southeast-2
+
+    - name: Update Helm chart values.yaml
+      uses: mikefarah/yq@master
+      with:
+        cmd: IMAGE_TAG=${{ needs.build-and-push.outputs.tag }} HOST="${{ needs.build-and-push.outputs.tag }}.dev.eratos.com" SELECTOR_LABEL="monorepo-test-${{ needs.build-and-push.outputs.tag }}" yq e -i '.image.tag = env(IMAGE_TAG) | .ingress.hosts[0].host = env(HOST) | .selectorLabel = env(SELECTOR_LABEL) | .name = env(SELECTOR_LABEL)' monorepo-chart/values.yaml
+
+    - name: Helm deploy to EKS
+      uses: netf/helm-eks-action@v1
+      with:
+        cluster-name: eratos-eks-kYFydEzM
+        command: helm upgrade ${{ needs.build-and-push.outputs.tag }} --install --wait monorepo-chart -f monorepo-chart/values.yaml
+
+  uninstall:
+    if: github.event.pull_request.merged == true && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-southeast-2
+
+    - name: Uninstall Helm chart release deploy to EKS
+      uses: netf/helm-eks-action@v1
+      with:
+        cluster-name: eratos-eks-kYFydEzM
+        command: helm uninstall ${{ needs.build-and-push.outputs.tag }} --wait
