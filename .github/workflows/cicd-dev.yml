@@ -28,8 +28,8 @@ jobs:
 
     - name: Build Docker image and push to ACR
       run: |
-        docker build -t eratos.azurecr.io/monorepo-test-ci:latest .
-        docker push eratos.azurecr.io/monorepo-test-ci:latest
+        docker build -t eratos.azurecr.io/monorepo-test-ci:develop .
+        docker push eratos.azurecr.io/monorepo-test-ci:develop
 
   deploy:
     runs-on: ubuntu-latest
@@ -48,4 +48,4 @@ jobs:
       uses: netf/helm-eks-action@v1
       with:
         cluster-name: eratos-eks-kYFydEzM
-        command: helm upgrade release1 --install --wait monorepo-chart -f monorepo-chart/values.yaml
+        command: helm upgrade develop --install --wait monorepo-chart -f monorepo-chart/values.yaml
