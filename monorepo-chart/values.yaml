@@ -11,7 +11,7 @@ image:
   repository: eratos.azurecr.io/monorepo-test-ci
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: latest
+  tag: develop
 imagePullSecrets: acr-secret
 
 nameOverride: ""
@@ -55,7 +55,7 @@ ingress:
     kubernetes.io/tls-acme: "true"
     acme.cert-manager.io/http01-edit-in-place: "true"
   hosts:
-    - host: 
+    - host:
       paths:
         - path: /
           pathType: Prefix
