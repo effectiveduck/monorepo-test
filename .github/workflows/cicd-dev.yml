@@ -24,7 +24,7 @@ jobs:
           type=sha,prefix={{branch}}-
 
     - name: Echo docker meta
-      run: echo TAG=${{ steps.meta.outputs.tags }}
+      run: echo TAG=${{ steps.meta.outputs.labels.org.opencontainers.image.version }}
 
   # build-and-push:
   #   runs-on: ubuntu-latest
