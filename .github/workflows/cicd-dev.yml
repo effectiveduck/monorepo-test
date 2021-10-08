@@ -23,7 +23,7 @@ jobs:
 
     - name: Echo docker meta
       run: |
-        echo TAG=${{ steps.meta.outputs.tag }}
+        echo TAG=${{ steps.meta.outputs.tags }}
         echo LABEL=${{ steps.meta.outputs.labels }}
   # build-and-push:
   #   runs-on: ubuntu-latest
