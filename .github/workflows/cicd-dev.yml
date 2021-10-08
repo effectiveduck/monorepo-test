@@ -21,12 +21,11 @@ jobs:
       with:
         images: eratos.azurecr.io/monorepo-test-ci
         tags: |
-          type=ref,event=branch
           type=semver,pattern={{major}}.{{minor}}
 
     - name: Echo docker meta
       run: echo TAG=${{ steps.meta.outputs.tags }}
-      
+
   # build-and-push:
   #   runs-on: ubuntu-latest
   #   steps:
