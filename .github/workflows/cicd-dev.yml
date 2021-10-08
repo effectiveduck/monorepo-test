@@ -20,12 +20,17 @@ jobs:
       uses: docker/metadata-action@v3
       with:
         images: eratos.azurecr.io/monorepo-test-ci
+        tags: |
+          type=ref,event=branch
+          type=ref,event=push
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
 
     - name: Echo docker meta
       run: |
         echo TAG=${{ steps.meta.outputs.tags }}
         echo LABEL=${{ steps.meta.outputs.labels }}
-        
+
   # build-and-push:
   #   runs-on: ubuntu-latest
   #   steps:
