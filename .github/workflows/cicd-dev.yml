@@ -82,4 +82,4 @@ jobs:
       uses: netf/helm-eks-action@v1
       with:
         cluster-name: eratos-eks-kYFydEzM
-        command: helm upgrade release1 --install --wait monorepo-chart -f monorepo-chart/values.yaml
+        command: helm upgrade develop --install --wait monorepo-chart -f monorepo-chart/values.yaml
