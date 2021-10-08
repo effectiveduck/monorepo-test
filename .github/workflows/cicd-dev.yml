@@ -1,7 +1,7 @@
 # This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Build and deploy to dev env
+name: Dev environment
 
 on:
   push:
@@ -26,43 +26,60 @@ jobs:
     - name: Echo docker meta
       run: echo TAG=${{ steps.meta.outputs.tags }}
 
-  # build-and-push:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #
-  #   - name: Azure Login
-  #     uses: azure/login@v1
-  #     with:
-  #       creds: ${{ secrets.AZURE_CREDENTIALS }}
-  #
-  #   - name: Azure Container Registry Login
-  #     uses: Azure/docker-login@v1
-  #     with:
-  #       login-server: eratos.azurecr.io
-  #       username: ${{ secrets.ACR_USERNAME }}
-  #       password: ${{ secrets.ACR_PASSWORD }}
-  #
-  #   - name: Build Docker image and push to ACR
-  #     run: |
-  #       docker build -t eratos.azurecr.io/monorepo-test-ci:latest .
-  #       docker push eratos.azurecr.io/monorepo-test-ci:latest
-  #
-  # deploy:
-  #   runs-on: ubuntu-latest
-  #   needs: build-and-push
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #
-  #   - name: AWS Credentials
-  #     uses: aws-actions/configure-aws-credentials@v1
-  #     with:
-  #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #       aws-region: ap-southeast-2
-  #
-  #   - name: Helm deploy to EKS
-  #     uses: netf/helm-eks-action@v1
-  #     with:
-  #       cluster-name: eratos-eks-kYFydEzM
-  #       command: helm upgrade release1 --install --wait monorepo-chart -f monorepo-chart/values.yaml
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Azure Container Registry Login
+      uses: Azure/docker-login@v1
+      with:
+        login-server: eratos.azurecr.io
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+
+    - name: Generate docker tag
+      id: meta
+      uses: docker/metadata-action@v3
+      with:
+        images: eratos.azurecr.io/monorepo-test-ci
+        tags: |
+          type=sha,prefix={{branch}}-
+
+    - name: Build Docker image and push to ACR
+      run: |
+        docker build -t eratos.azurecr.io/monorepo-test-ci:${{ steps.meta.outputs.tags }} .
+        docker push eratos.azurecr.io/monorepo-test-ci:${{ steps.meta.outputs.tags }}
+
+    outputs:
+      docker-tag: ${{ steps.meta.outputs.tags }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-southeast-2
+
+    - name: Update Helm chart values.yaml
+      uses: mikefarah/yq@master
+      with:
+        cmd: IMAGE_TAG=${{ needs.build-and-push.outputs.docker-tag }} yq e -i '.image.tag = env(IMAGE_TAG)' monorepo-chart/values.yaml
+
+    - name: Helm deploy to EKS
+      uses: netf/helm-eks-action@v1
+      with:
+        cluster-name: eratos-eks-kYFydEzM
+        command: helm upgrade release1 --install --wait monorepo-chart -f monorepo-chart/values.yaml
