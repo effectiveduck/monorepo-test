@@ -22,7 +22,7 @@ jobs:
         images: eratos.azurecr.io/monorepo-test-ci
         tags: |
           type=ref,event=branch
-          type=ref,event=push
+          type=ref,event=pr
           type=semver,pattern={{version}}
           type=semver,pattern={{major}}.{{minor}}
 
