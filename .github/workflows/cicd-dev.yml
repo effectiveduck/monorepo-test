@@ -28,10 +28,7 @@ jobs:
 
     - name: Build Docker image and push to ACR
       run: |
-<<<<<<< HEAD
-        docker rmi --force eratos.azurecr.io/monorepo-test-ci:develop
-=======
->>>>>>> 73ffb87b7921038183aa1cb51ad12325c7be52a8
+        docker rmi -f eratos.azurecr.io/monorepo-test-ci:develop
         docker build -t eratos.azurecr.io/monorepo-test-ci:develop .
         docker push eratos.azurecr.io/monorepo-test-ci:develop
 
