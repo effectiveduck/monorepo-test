@@ -25,6 +25,7 @@ jobs:
       run: |
         echo TAG=${{ steps.meta.outputs.tags }}
         echo LABEL=${{ steps.meta.outputs.labels }}
+        
   # build-and-push:
   #   runs-on: ubuntu-latest
   #   steps:
