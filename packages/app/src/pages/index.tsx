@@ -65,7 +65,7 @@ const Home: NextPage = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered byyyyyyyyyyyyyyyyyyyyyy{" "}
+          Powered by{" "}
         </a>
       </footer>
     </div>
