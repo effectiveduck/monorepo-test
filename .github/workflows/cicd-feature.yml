@@ -17,7 +17,8 @@ jobs:
     if: github.event.pull_request.merged == false
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
 
     - name: Set docker image tag env var
       run: echo "TAG=$(echo pr-$PR_NUMBER)" >> $GITHUB_ENV
@@ -51,7 +52,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-and-push
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
 
     - name: AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -76,7 +78,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-and-push
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
 
     - name: AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -96,11 +99,12 @@ jobs:
         cluster-name: eratos-eks-kYFydEzM
         command: helm upgrade ${{ needs.build-and-push.outputs.tag }} --install --wait monorepo-chart -f monorepo-chart/values.yaml
 
-  uninstall:
+  destroy:
     if: github.event.pull_request.merged == true && github.event.action == 'closed'
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
 
     - name: Get PR tag
       run: echo "TAG=$(echo pr-$PR_NUMBER)" >> $GITHUB_ENV
@@ -112,8 +116,32 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-southeast-2
 
-    - name: Uninstall Helm chart release deploy to EKS
+    - name: Uninstall Pull Request Helm chart
       uses: netf/helm-eks-action@v1
       with:
         cluster-name: eratos-eks-kYFydEzM
         command: helm uninstall $TAG
+
+    - name: Delete Pull Request Route53 A record
+      uses: BGarber42/route53-record-set@master
+      with:
+        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_route53_hosted_zone_id: Z046056716K6KGPHCJO3S
+          aws_route53_rr_action: "DELETE"
+          aws_route53_rr_name: "pr-$PR_NUMBER.dev.eratos.com"
+          aws_route53_rr_type: "A"
+          # aws_route53_rr_ttl: "300"
+          # aws_route53_rr_value: "1.2.3.4"
+
+    - name: Delete Pull Request Route53 TXT record
+      uses: BGarber42/route53-record-set@master
+      with:
+        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_route53_hosted_zone_id: Z046056716K6KGPHCJO3S
+          aws_route53_rr_action: "DELETE"
+          aws_route53_rr_name: "pr-$PR_NUMBER.dev.eratos.com"
+          aws_route53_rr_type: "TXT"
+          # aws_route53_rr_ttl: "300"
+          # aws_route53_rr_value: "1.2.3.4"
