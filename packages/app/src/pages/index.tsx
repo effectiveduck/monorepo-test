@@ -28,10 +28,7 @@ const Home: NextPage = () => {
         <div>
           <a href="https://nextjs.org/docs">
             <h2>Documentation &rarr;</h2>
-            <p>
-              Find in-depth information about Next.js features and
-              APIIIIIIIIIIIIIIIIIIIIIIIII.
-            </p>
+            <p>Find in-depth information about Next.js features and APII.</p>
           </a>
 
           <a href="https://nextjs.org/learn">
