@@ -126,22 +126,22 @@ jobs:
       uses: BGarber42/route53-record-set@master
       with:
         aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_route53_hosted_zone_id: Z046056716K6KGPHCJO3S
-          aws_route53_rr_action: "DELETE"
-          aws_route53_rr_name: "pr-$PR_NUMBER.dev.eratos.com"
-          aws_route53_rr_type: "A"
-          # aws_route53_rr_ttl: "300"
-          # aws_route53_rr_value: "1.2.3.4"
+        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws_route53_hosted_zone_id: Z046056716K6KGPHCJO3S
+        aws_route53_rr_action: "DELETE"
+        aws_route53_rr_name: "pr-$PR_NUMBER.dev.eratos.com"
+        aws_route53_rr_type: "A"
+        # aws_route53_rr_ttl: "300"
+        # aws_route53_rr_value: "1.2.3.4"
 
     - name: Delete Pull Request Route53 TXT record
       uses: BGarber42/route53-record-set@master
       with:
         aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_route53_hosted_zone_id: Z046056716K6KGPHCJO3S
-          aws_route53_rr_action: "DELETE"
-          aws_route53_rr_name: "pr-$PR_NUMBER.dev.eratos.com"
-          aws_route53_rr_type: "TXT"
-          # aws_route53_rr_ttl: "300"
-          # aws_route53_rr_value: "1.2.3.4"
+        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws_route53_hosted_zone_id: Z046056716K6KGPHCJO3S
+        aws_route53_rr_action: "DELETE"
+        aws_route53_rr_name: "pr-$PR_NUMBER.dev.eratos.com"
+        aws_route53_rr_type: "TXT"
+        # aws_route53_rr_ttl: "300"
+        # aws_route53_rr_value: "1.2.3.4"
